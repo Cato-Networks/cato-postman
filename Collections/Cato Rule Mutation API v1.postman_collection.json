@@ -1,0 +1,852 @@
+{
+	"info": {
+		"_postman_id": "e938b39d-4738-4b63-aa1a-d9bce1df6a93",
+		"name": "Cato Rule Mutation API v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "addLocalRoutingRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"admin\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_networkInterface",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"networkInterface\",\n    \"parent\": {\n        \"id\": 0,\n        \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_siteRange",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"siteRange\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_host",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"host\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "allow_ICMP_host_to_any",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addLocalRoutingRule ($accountId: ID!, $siteID: ID!, $input: AddLocalRoutingRuleInput!) {\n    rule(accountId: $accountId) {\n        addLocalRoutingRule (siteId: $siteID, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"host-to-any-icmp\",\n        \"enableRule\": false,\n        \"allowIcmp\": true,\n        \"allowUdp\": false,\n        \"allowTcp\": true,\n        \"direction\": \"TO\",\n        \"enableLocalNat\": false,\n        \"source\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ],\n        \"destination\": [\n            {\n                \"type\": \"any\",\n                \"id\": -1,\n                \"name\": \"Any\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "allow_TCP_80_host_to_network (not working)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addLocalRoutingRule ($accountId: ID!, $siteID: ID!, $input: AddLocalRoutingRuleInput!) {\n    rule(accountId: $accountId) {\n        addLocalRoutingRule (siteId: $siteID, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"host-to-networks-tcp-80\",\n        \"enableRule\": true,\n        \"allowIcmp\": false,\n        \"allowUdp\": false,\n        \"allowTcp\": true,\n        \"ipPortRanges\": [\n            \"80\"\n        ],\n        \"direction\": \"TO\",\n        \"enableLocalNat\": false,\n        \"source\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ],\n        \"destination\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "allow_UDP_range_both_host_to_host",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addLocalRoutingRule ($accountId: ID!, $siteID: ID!, $input: AddLocalRoutingRuleInput!) {\n    rule(accountId: $accountId) {\n        addLocalRoutingRule (siteId: $siteID, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"host-to-host-udp-range\",\n        \"enableRule\": true,\n        \"allowIcmp\": false,\n        \"allowUdp\": true,\n        \"allowTcp\": false,\n        \"direction\": \"BOTH\",\n        \"ipPortRanges\": [\n            \"80-90\",\n            \"5000-5400\"\n        ],\n        \"enableLocalNat\": false,\n        \"source\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ],\n        \"destination\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "allow_TCP_from_host_to_any_with_NAT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addLocalRoutingRule ($accountId: ID!, $siteID: ID!, $input: AddLocalRoutingRuleInput!) {\n    rule(accountId: $accountId) {\n        addLocalRoutingRule (siteId: $siteID, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"host-to-any-tcp-NAT\",\n        \"enableRule\": true,\n        \"allowIcmp\": false,\n        \"allowUdp\": false,\n        \"allowTcp\": true,\n        \"direction\": \"TO\",\n        \"enableLocalNat\": true,\n        \"localNatType\": \"DynamicNAT\",\n        \"source\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ],\n        \"destination\": [\n            {\n                \"type\": \"any\",\n                \"id\": -1,\n                \"name\": \"Any\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateLocalRoutingRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 0,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_rule_allow_ICMP (need rework cant update single parameter))",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateLocalRoutingRule ($accountId: ID!, $ruleId: ID!, $input: UpdateLocalRoutingRuleInput!) {\n    rule(accountId: $accountId) {\n        updateLocalRoutingRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"name\": \"host-to-host-udp-range\",\n        \"enableRule\": true,\n        \"allowIcmp\": false,\n        \"allowUdp\": true,\n        \"allowTcp\": false,\n        \"direction\": \"BOTH\",\n        \"ipPortRanges\": [\n            \"80-90\",\n            \"5000-5400\"\n        ],\n        \"source\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ],\n        \"destination\": [\n            {\n                \"type\": \"any\",\n                \"id\": -1,\n                \"name\": \"Any\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeLocalRoutingRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 0,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_rule (bugged - remove all rules)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeLocalRoutingRule ($accountId: ID!, $ruleId: ID!) {\n    rule(accountId: $accountId) {\n        removeLocalRoutingRule (ruleId: $ruleId) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addSourcesToRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 0,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "add_networkrange_to_source (bugged - need name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSourcesToRule ($accountId: ID!, $ruleId: ID!, $input: AddSourcesToRuleInput!) {\n    rule(accountId: $accountId) {\n        addSourcesToRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"sourcesToAdd\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_host_to_source  (bugged - need name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSourcesToRule ($accountId: ID!, $ruleId: ID!, $input: AddSourcesToRuleInput!) {\n    rule(accountId: $accountId) {\n        addSourcesToRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"sourcesToAdd\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeSourcesToRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 52887,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_from_source",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeSourcesFromRule ($accountId: ID!, $ruleId: ID!, $input: RemoveSourcesFromRuleInput!) {\n    rule(accountId: $accountId) {\n        removeSourcesFromRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"sourcesToRemove\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addDestinationsToRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 52887,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "add_networkrange_to_destination (bugged - need name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addDestinationsToRule ($accountId: ID!, $ruleId: ID!, $input: AddDestinationsToRuleInput!) {\n    rule(accountId: $accountId) {\n        addDestinationsToRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"destinationsToAdd\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_host_to_destination (bugged - need name)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addDestinationsToRule ($accountId: ID!, $ruleId: ID!, $input: AddDestinationsToRuleInput!) {\n    rule(accountId: $accountId) {\n        addDestinationsToRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"destinationsToAdd\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"host\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeDestinationsToRule",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_localRouting",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"localRouting\",\n    \"parent\": {\n      \"id\": 52887,\n      \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_from_destination",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeDestinationsFromRule ($accountId: ID!, $ruleId: ID!, $input: RemoveDestinationsFromRuleInput!) {\n    rule(accountId: $accountId) {\n        removeDestinationsFromRule (ruleId: $ruleId, input: $input) {\n            ruleId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"ruleId\": \"0\",\n    \"input\": {\n        \"destinationsToRemove\": [\n            {\n                \"id\": \"0\",\n                \"type\": \"siteRange\"\n            }\n        ]\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

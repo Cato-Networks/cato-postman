@@ -1,0 +1,2344 @@
+{
+	"info": {
+		"_postman_id": "8abe44e7-d4b5-400e-81ac-abd779faa7ed",
+		"name": "Cato Site Mutation API v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "addSocketSite",
+			"item": [
+				{
+					"name": "_runner",
+					"item": [
+						{
+							"name": "addSocketSite",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Site Created\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(pm.request.body.graphql.variables);",
+											"var stateCode = pm.iterationData.get('stateCode');",
+											"",
+											"//remove stateCode key if null or undefined",
+											"if(!stateCode){",
+											"    delete jsonData.input.siteLocation.stateCode",
+											"}",
+											"",
+											"//rewriting graphQL variables",
+											"pm.request.body.graphql.variables = jsonData;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation addSocketSite ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+										"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"{{name}}\",\n        \"description\": \"{{description}}\",\n        \"siteType\": \"{{siteType}}\",\n        \"connectionType\": \"{{connectionType}}\",\n        \"nativeNetworkRange\": \"{{nativeNetworkRange}}\",\n        \"siteLocation\": {\n            \"countryCode\": \"{{countryCode}}\",\n            \"stateCode\": \"{{stateCode}}\",\n            \"timezone\": \"{{timezone}}\"\n        }\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_country_timezone",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!) {\n    entityLookup (accountID: $accountID, type: $type) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"country\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_stateCode",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!) {\n    entityLookup (accountID: $accountID, type: $type) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"countryState\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create_x1500_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSiteTestBen ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"BRANCH\",\n        \"connectionType\": \"SOCKET_X1500\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_x1600_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSiteTestBen ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"BRANCH\",\n        \"connectionType\": \"SOCKET_X1600\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_x1700_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSite ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"DATACENTER\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"connectionType\": \"SOCKET_X1700\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_ESX_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSite ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"DATACENTER\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"connectionType\": \"SOCKET_ESX1500\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_AWS_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSite ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"CLOUD_DC\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"connectionType\": \"SOCKET_AWS1500\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_Azure_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addSocketSite ($accountId: ID!, $input: AddSocketSiteInput!) {\n    site(accountId: $accountId) {\n        addSocketSite (input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"CLOUD_DC\",\n        \"nativeNetworkRange\": \"192.168.1.0/24\",\n        \"connectionType\": \"SOCKET_AZ1500\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addIpsecIkeV2Site",
+			"item": [
+				{
+					"name": "_runner",
+					"item": [
+						{
+							"name": "addIpsecIkeV2Site",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Site Created\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(pm.request.body.graphql.variables);",
+											"var stateCode = pm.iterationData.get('stateCode');",
+											"",
+											"//remove stateCode key if null or undefined",
+											"if(!stateCode){",
+											"    delete jsonData.input.siteLocation.stateCode",
+											"}",
+											"",
+											"//rewriting graphQL variables",
+											"pm.request.body.graphql.variables = jsonData;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation addIpsecIkeV2Site($accountId: ID!, $input: AddIpsecIkeV2SiteInput!) {\n    site(accountId: $accountId) {\n        addIpsecIkeV2Site(input: $input) {\n            siteId\n        }\n    }\n}",
+										"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n        \"name\": \"{{name}}\",\n        \"description\": \"{{description}}\",\n        \"siteType\": \"{{siteType}}\",\n        \"nativeNetworkRange\": \"{{nativeNetworkRange}}\",\n        \"siteLocation\": {\n            \"countryCode\": \"{{countryCode}}\",\n            \"stateCode\": \"{{stateCode}}\",\n            \"timezone\": \"{{timezone}}\"\n        }\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_country_timezone",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!) {\n    entityLookup (accountID: $accountID, type: $type) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"country\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_stateCode",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!) {\n    entityLookup (accountID: $accountID, type: $type) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"countryState\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "addIpsecIkeV2Site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addSocketSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addIpsecIkeV2Site($accountId: ID!, $input: AddIpsecIkeV2SiteInput!) {\n  site(accountId: $accountId) {\n    addIpsecIkeV2Site(input: $input) {\n      siteId\n    }\n  }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"input\": {\n    \"name\": \"site-ipsec\",\n    \"siteType\": \"BRANCH\",\n    \"description\": \"test\",\n    \"nativeNetworkRange\": \"90.7.0.0/24\",\n    \"siteLocation\": {\n      \"countryCode\": \"AF\",\n      \"timezone\": \"Asia/Hong_Kong\",\n      \"address\": \"Hong_Kong\"\n    }\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateSiteGeneralDetails",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_all",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSiteGeneralDetails ($accountId: ID!, $siteID: ID!, $input: UpdateSiteGeneralDetailsInput!) {\n    site(accountId: $accountId) {\n        updateSiteGeneralDetails (siteId: $siteID, input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"MySite\",\n        \"description\": \"\",\n        \"siteType\": \"DATACENTER\",\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_name",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSiteGeneralDetails ($accountId: ID!, $siteID: ID!, $input: UpdateSiteGeneralDetailsInput!) {\n    site(accountId: $accountId) {\n        updateSiteGeneralDetails (siteId: $siteID, input: $input) {\n            siteId\n        }\n    }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"name\": \"MySite\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_description",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSiteGeneralDetails ($accountId: ID!, $siteID: ID!, $input: UpdateSiteGeneralDetailsInput!) {\n    site(accountId: $accountId) {\n        updateSiteGeneralDetails (siteId: $siteID, input: $input) {\n            siteId\n        }\n    }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"description\": \"\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_siteType",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSiteGeneralDetails ($accountId: ID!, $siteID: ID!, $input: UpdateSiteGeneralDetailsInput!) {\n    site(accountId: $accountId) {\n        updateSiteGeneralDetails (siteId: $siteID, input: $input) {\n            siteId\n        }\n    }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"siteType\": \"CLOUD_DC\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_siteLocation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSiteGeneralDetails ($accountId: ID!, $siteID: ID!, $input: UpdateSiteGeneralDetailsInput!) {\n    site(accountId: $accountId) {\n        updateSiteGeneralDetails (siteId: $siteID, input: $input) {\n            siteId\n        }\n    }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteID\": 0,\n    \"input\": {\n        \"siteLocation\": {\n            \"countryCode\": \"FR\",\n            \"timezone\": \"Europe/Paris\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateIpsecIkeV2SiteGeneralDetails",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\",\n    \"helperFields\": [\"ikeV2Data\"]\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_allocated_ips",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup($accountID:ID!, $type:EntityType!, $search: String, $helperFields: [String!], $entityIDs: [ID!]) {\n  entityLookup(accountID: $accountID, type:$type, search: $search, helperFields: $helperFields, entityIDs: $entityIDs) {\n    items {\n      entity {\n        id\n        name\n        type\n      }\n      description\n      helperFields\n    }\n  }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"allocatedIP\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_auth_init_messages",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateIpsecIkeV2SiteGeneralDetails($accountId: ID!, $siteId: ID!, $input: UpdateIpsecIkeV2SiteGeneralDetailsInput!) {\n  site(accountId: $accountId) {\n    updateIpsecIkeV2SiteGeneralDetails(siteId: $siteId, input: $input) {\n      siteId\n    }\n  }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n    \"connectionMode\": \"RESPONDER_ONLY\",\n    \"identificationType\": \"FQDN\",\n    \"initMessage\": {\n      \"cipher\": \"AUTOMATIC\",\n      \"dhGroup\": \"DH_15_MODP3072\",\n      \"integrity\": \"SHA256\",\n      \"prf\": \"SHA256\"\n    },\n    \"authMessage\": {\n      \"cipher\": \"AES_GCM_256\",\n      \"dhGroup\": \"DH_16_MODP4096\",\n      \"integrity\": \"AUTOMATIC\"\n    },\n    \"networkRanges\": \"Service1:100.100.100.0/24\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_bidirectional_connectionMode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateIpsecIkeV2SiteGeneralDetails($accountId: ID!, $siteId: ID!, $input: UpdateIpsecIkeV2SiteGeneralDetailsInput!) {\n  site(accountId: $accountId) {\n    updateIpsecIkeV2SiteGeneralDetails(siteId: $siteId, input: $input) {\n      siteId\n    }\n  }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n        \"connectionMode\": \"BIDIRECTIONAL\",\n        \"identificationType\": \"IPV4\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_responder_connectionMode",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateIpsecIkeV2SiteGeneralDetails($accountId: ID!, $siteId: ID!, $input: UpdateIpsecIkeV2SiteGeneralDetailsInput!) {\n  site(accountId: $accountId) {\n    updateIpsecIkeV2SiteGeneralDetails(siteId: $siteId, input: $input) {\n      siteId\n    }\n  }\n}\n\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n        \"connectionMode\": \"RESPONDER_ONLY\",\n        \"identificationType\": \"FQDN\"\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateIpsecIkeV2SiteTunnels",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\",\n    \"helperFields\": [\"ikeV2Data\"]\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_allocated_ips",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup($accountID:ID!, $type:EntityType!, $search: String, $helperFields: [String!], $entityIDs: [ID!]) {\n  entityLookup(accountID: $accountID, type:$type, search: $search, helperFields: $helperFields, entityIDs: $entityIDs) {\n    items {\n      entity {\n        id\n        name\n        type\n      }\n      description\n      helperFields\n    }\n  }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"allocatedIP\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_tunnels",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSiteGeneralDetails).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateIpsecIkeV2SiteTunnels($accountId: ID!, $siteId: ID!, $input: UpdateIpsecIkeV2SiteTunnelsInput!) {\n  site(accountId: $accountId) {\n     updateIpsecIkeV2SiteTunnels(siteId: $siteId, input: $input) {\n      siteId\n    }\n  }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n    \"primary\": {\n      \"destinationType\": \"FQDN\",\n      \"tunnels\": {\n        \"tunnelId\":\"PRIMARY1\",\n        \"privateCatoIp\": \"21.21.21.5\",\n        \"privateSiteIp\": \"2.2.2.5\",\n        \"lastMileBw\": {\n            \"downstream\": 222,\n          \"upstream\": 222\n        },\n        \"psk\": \"TEst123456789\"\n      }\n    }, \n    \"secondary\": {\n      \"destinationType\": \"FQDN\",\n      \"tunnels\": {\n       \"tunnelId\":\"SECONDARY1\",\n        \"privateCatoIp\": \"21.21.21.7\",\n        \"privateSiteIp\": \"2.2.2.7\",\n        \"lastMileBw\": {\n            \"downstream\": 222,\n          \"upstream\": 222\n        },\n        \"psk\": \"TEst123456789\"\n      }\n    }\n  }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeSite",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_site",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Site Removed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.removeSite).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeSite ($accountId: ID!, $site: ID!) {\n    site(accountId: $accountId) {\n        removeSite (siteId: $site) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"site\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateSocketInterface",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_LAN1_nativeRange",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"LAN1\",\n    \"input\": {\n        \"name\": \"LAN-01\",\n        \"destType\": \"LAN\",\n        \"lan\": {\n            \"subnet\": \"192.168.4.0/24\",\n            \"localIp\": \"192.168.4.1\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_LAN1_LAN_VRRP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"LAN1\",\n    \"input\": {\n        \"name\": \"LAN-01\",\n        \"destType\": \"VRRP_AND_LAN\",\n        \"lan\": {\n            \"subnet\": \"192.168.4.0/24\",\n            \"localIp\": \"192.168.4.1\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_LAN2_VRRP_direct",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"LAN2\",\n    \"input\": {\n        \"name\": \"VRRP\",\n        \"destType\": \"VRRP\",\n        \"vrrp\": {\n            \"vrrpType\": \"DIRECT_LINK\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_LAN2_VRRP_via_switch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"LAN2\",\n    \"input\": {\n        \"name\": \"VRRP\",\n        \"destType\": \"VRRP\",\n        \"vrrp\": {\n            \"vrrpType\": \"VIA_SWITCH\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_WAN1_active",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN1\",\n    \"input\": {\n        \"name\": \"WAN FTTH\",\n        \"destType\": \"CATO\",\n        \"bandwidth\": {\n            \"upstreamBandwidth\": 25,\n            \"downstreamBandwidth\": 25\n        },\n        \"wan\": {\n            \"role\": \"wan_1\",\n            \"precedence\": \"ACTIVE\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_WAN1_OFFCLOUD",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN1\",\n    \"input\": {\n        \"name\": \"WAN FTTH\",\n        \"destType\": \"CATO\",\n        \"bandwidth\": {\n            \"upstreamBandwidth\": 25,\n            \"downstreamBandwidth\": 25\n        },\n        \"wan\": {\n            \"role\": \"wan_1\",\n            \"precedence\": \"ACTIVE\"\n        },\n        \"offCloud\": {\n            \"enabled\": true\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_WAN2_passive",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN2\",\n    \"input\": {\n        \"name\": \"WAN LTE\",\n        \"destType\": \"CATO\",\n        \"bandwidth\": {\n            \"upstreamBandwidth\": 25,\n            \"downstreamBandwidth\": 25\n        },\n        \"wan\": {\n            \"role\": \"wan_2\",\n            \"precedence\": \"PASSIVE\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_WAN2_ALTERNATIVE_WAN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN2\",\n    \"input\": {\n        \"name\": \"MPLS\",\n        \"destType\": \"ALTERNATIVE\",\n        \"altWan\": {\n            \"privateInterfaceIp\": \"10.0.0.1\",\n            \"privateNetwork\": \"10.0.0.0/24\",\n            \"privateGatewayIp\": \"10.0.0.254\",\n            \"privateVlanTag\": 101,\n            \"publicInterfaceIp\": \"80.0.0.1\",\n            \"publicNetwork\": \"80.0.0.0/24\",\n            \"publicGatewayIp\": \"80.0.0.254\",\n            \"publicVlanTag\": 100\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_WAN2_ALTERNATIVE_WAN_L2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN2\",\n    \"input\": {\n        \"name\": \"MPLS\",\n        \"destType\": \"LAYER_2_WAN\",\n        \"altWan\": {\n            \"privateInterfaceIp\": \"10.0.0.1\",\n            \"privateNetwork\": \"10.0.0.0/24\",\n            \"privateGatewayIp\": \"10.0.0.254\",\n            \"privateVlanTag\": 101,\n            \"publicInterfaceIp\": \"80.0.0.1\",\n            \"publicNetwork\": \"80.0.0.0/24\",\n            \"publicGatewayIp\": \"80.0.0.254\",\n            \"publicVlanTag\": 100\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "disable_interface",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Socket Interface Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateSocketInterface).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateSocketInterface ($accountId: ID!, $siteId: ID!, $socketInterfaceId: SocketInterfaceIDEnum!, $input: UpdateSocketInterfaceInput!) {\n    site(accountId: $accountId) {\n        updateSocketInterface (siteId: $siteId, socketInterfaceId: $socketInterfaceId, input: $input) {\n            siteId\n            socketInterfaceId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"socketInterfaceId\": \"WAN2\",\n    \"input\": {\n        \"destType\": \"INTERFACE_DISABLED\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addNetworkRange",
+			"item": [
+				{
+					"name": "_runner",
+					"item": [
+						{
+							"name": "query_site",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Site ID Retrieved\", function () {",
+											"    var siteName = pm.iterationData.get(\"siteName\");",
+											"",
+											"    _.each(pm.response.json().data.entityLookup.items, (item) => {",
+											"        if(item.entity.name === siteName) {",
+											"            pm.environment.set(\"siteId\", item.entity.id);",
+											"        }",
+											"    })",
+											"",
+											"    pm.expect(pm.environment.get(\"siteId\")).not.null;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"{{siteName}}\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "query_networkInterface",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Network Interface ID Retrieved\", function () {",
+											"    var siteId = pm.environment.get(\"siteId\");",
+											"",
+											"    _.each(pm.response.json().data.entityLookup.items, (item) => {",
+											"        if(item.helperFields.siteId == siteId) {",
+											"            pm.environment.set(\"lanSocketInterfaceId\", item.entity.id);",
+											"        }",
+											"    })",
+											"",
+											"    pm.expect(pm.environment.get(\"lanSocketInterfaceId\")).not.null;",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"networkInterface\",\n    \"parent\": {\n        \"id\": \"{{siteId}}\",\n        \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addNetworkRange",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Network Created\", function () {",
+											"    var jsonData = pm.response.json();",
+											"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+											"});",
+											"",
+											"pm.environment.unset(\"lanSocketInterfaceId\");",
+											"pm.environment.unset(\"siteId\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(pm.request.body.graphql.variables);",
+											"var rangeType = pm.iterationData.get('rangeType');",
+											"var dhcpType = pm.iterationData.get('dhcpType');",
+											"",
+											"//Switch on range type",
+											"switch (rangeType){",
+											"    case \"Direct\":",
+											"        delete jsonData.input.vlan",
+											"        delete jsonData.input.gateway",
+											"        break;",
+											"    case \"Routed\":",
+											"        delete jsonData.input.localIp",
+											"        delete jsonData.input.vlan",
+											"        break;",
+											"    case \"VLAN\":",
+											"        delete jsonData.input.gateway",
+											"        break;",
+											"}",
+											"",
+											"//Switch on range type",
+											"switch (dhcpType){",
+											"    case 'DHCP_RELAY':",
+											"        delete jsonData.input.dhcpSettings.ipRange",
+											"        break;",
+											"    case 'DHCP_RANGE':",
+											"        delete jsonData.input.dhcpSettings.relayGroupId",
+											"        break;",
+											"    default:",
+											"        delete jsonData.input.dhcpSettings",
+											"        break;",
+											"}",
+											"",
+											"//rewriting graphQL variables",
+											"pm.request.body.graphql.variables = jsonData;"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+										"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": \"{{lanSocketInterfaceId}}\",\n    \"input\": {\n        \"name\": \"{{name}}\",\n        \"rangeType\": \"{{rangeType}}\",\n        \"subnet\": \"{{subnet}}\",\n        \"localIp\": \"{{localIp}}\",\n        \"vlan\": \"{{vlan}}\",\n        \"gateway\": \"{{gateway}}\",\n        \"dhcpSettings\": {\n            \"dhcpType\": \"{{dhcpType}}\",\n            \"relayGroupId\": \"{{relayGroupId}}\",\n            \"ipRange\": \"{{ipRange}}\"\n        }\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_networkInterface",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $parent: EntityInput!) {\n    entityLookup (accountID: $accountID, type: $type, parent: $parent) {\n        items {\n            entity {\n                id\n                name\n                type\n            }\n            description\n            helperFields\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"networkInterface\",\n    \"parent\": {\n        \"id\": 0,\n        \"type\": \"site\"\n    }\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create_network_VLAN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 46670,\n    \"input\": {\n        \"name\": \"GUEST WIFI 1112\",\n        \"rangeType\": \"VLAN\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"translatedSubent\": \"10.0.0.0/24\",\n        \"localIp\": \"192.168.100.1\",\n        \"vlan\": 100\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_network_VLAN_translated_subnet",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 0,\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"VLAN\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"localIp\": \"192.168.100.1\",\n        \"vlan\": 100\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_network_VLAN_DHCP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 0,\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"VLAN\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"localIp\": \"192.168.100.1\",\n        \"vlan\": 100,\n        \"dhcpSettings\": {\n            \"dhcpType\": \"DHCP_RANGE\",\n            \"ipRange\": \"192.168.100.10-192.168.100.20\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_network_VLAN_DHCP_Relay",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 0,\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"VLAN\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"localIp\": \"192.168.100.1\",\n        \"vlan\": 100,\n        \"dhcpSettings\": {\n            \"dhcpType\": \"DHCP_RELAY\",\n            \"relayGroupId\": \"2\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_network_ROUTED",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 0,\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"Routed\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"gateway\": \"192.168.1.250\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_network_DIRECT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addNetworkRange ($accountId: ID!, $lanSocketInterfaceId: ID!, $input: AddNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        addNetworkRange (lanSocketInterfaceId: $lanSocketInterfaceId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"lanSocketInterfaceId\": 0,\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"Direct\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"localIp\": \"192.168.100.1\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateNetworkRange",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_siteRange",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"siteRange\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_network_NATIVE_DHCP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateNetworkRange ($accountId: ID!, $networkRangeId: ID!, $input: UpdateNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        updateNetworkRange (networkRangeId: $networkRangeId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"networkRangeId\": \"0\",\n    \"input\": {\n        \"rangeType\": \"Native\",\n        \"dhcpSettings\": {\n            \"dhcpType\": \"DHCP_RANGE\",\n            \"ipRange\": \"192.168.4.10-192.168.4.20\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_network_VLAN_DHCP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateNetworkRange ($accountId: ID!, $networkRangeId: ID!, $input: UpdateNetworkRangeInput!) {\n    site(accountId: $accountId) {\n        updateNetworkRange (networkRangeId: $networkRangeId, input: $input) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"networkRangeId\": \"0\",\n    \"input\": {\n        \"name\": \"192.168.100.0/24\",\n        \"rangeType\": \"VLAN\",\n        \"subnet\": \"192.168.100.0/24\",\n        \"localIp\": \"192.168.100.1\",\n        \"vlan\": 100,\n        \"dhcpSettings\": {\n            \"dhcpType\": \"DHCP_RANGE\",\n            \"ipRange\": \"192.168.100.10-192.168.100.20\"\n        }\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeNetworkRange",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_siteRange",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"siteRange\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_network",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Network Removed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.removeNetworkRange).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeNetworkRange ($accountId: ID!, $networkRangeId: ID!) {\n    site(accountId: $accountId) {\n        removeNetworkRange (networkRangeId: $networkRangeId) {\n            networkRangeId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"networkRangeId\": \"0\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateHa",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_HA_settings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"HA settings Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.updateHa).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateHa ($accountId: ID!, $siteId: ID!, $input: UpdateHaInput!) {\n    site(accountId: $accountId) {\n        updateHa (siteId: $siteId, input: $input) {\n            siteId\n        }\n    }\n}",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n        \"primaryManagementIp\": \"192.168.4.2\",\n        \"secondaryManagementIp\": \"192.168.4.3\",\n        \"vrid\": 100\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addStaticHost",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_site",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"site\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "create_host",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Host Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addStaticHost).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addStaticHost ($accountId: ID!, $siteId: ID!, $input:AddStaticHostInput!) {\n    site(accountId: $accountId) {\n      addStaticHost(\n        siteId: $siteId, \n        input: $input\n      ) {\n      hostId\n    }\n  }\n}\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n        \"name\": \"MyHost\",\n        \"ip\": \"192.168.4.200\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_host_dhcp_resa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Host Created\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addStaticHost).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation addStaticHost ($accountId: ID!, $siteId: ID!, $input:AddStaticHostInput!) {\n    site(accountId: $accountId) {\n      addStaticHost(\n        siteId: $siteId, \n        input: $input\n      ) {\n      hostId\n    }\n  }\n}\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"siteId\": 0,\n    \"input\": {\n        \"name\": \"MyHost\",\n        \"ip\": \"192.168.4.10\",\n        \"macAddress\": \"00:00:00:00:00:00\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "updateStaticHost",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_staticHost",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n            description\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"host\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "update_host",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Host Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addStaticHost).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateStaticHost ($accountId: ID!, $hostId: ID!, $input:UpdateStaticHostInput!){\n    site(accountId: $accountId) {\n      updateStaticHost(\n        hostId: $hostId, \n        input: $input\n      ) {\n      hostId\n    }\n  }\n}\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"hostId\": 0,\n    \"input\": {\n        \"name\": \"MyHost\",\n        \"ip\": \"192.168.4.10\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_host_dhcp_resa",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Host Updated\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addStaticHost).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation updateStaticHost ($accountId: ID!, $hostId: ID!, $input:UpdateStaticHostInput!){\n    site(accountId: $accountId) {\n      updateStaticHost(\n        hostId: $hostId, \n        input: $input\n      ) {\n      hostId\n    }\n  }\n}\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"hostId\": 0,\n    \"input\": {\n        \"name\": \"MyHost\",\n        \"ip\": \"192.168.4.10\",\n        \"macAddress\": \"00:00:00:00:00:00\"\n    }\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "removeStaticHost",
+			"item": [
+				{
+					"name": "_query",
+					"item": [
+						{
+							"name": "query_staticHost",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "graphql",
+									"graphql": {
+										"query": "query entityLookup ($accountID: ID!, $type: EntityType!, $search: String) {\n    entityLookup (accountID: $accountID, type: $type, search: $search) {\n        items {\n            entity {\n                id\n                name\n            }\n        }\n    }\n}",
+										"variables": "{\n    \"accountID\": \"{{accountID}}\",\n    \"type\": \"host\",\n    \"search\": \"MySite\"\n}"
+									}
+								},
+								"url": {
+									"raw": "{{url}}",
+									"host": [
+										"{{url}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "remove_host",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Host Removed\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.data.site.addStaticHost).not.null;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation removeStaticHost ($accountId: ID!, $hostId: ID!){\n    site(accountId: $accountId) {\n      removeStaticHost(\n        hostId: $hostId\n      ) {\n      hostId\n    }\n  }\n}\n",
+								"variables": "{\n    \"accountId\": \"{{accountID}}\",\n    \"hostId\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{api-key}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "x-api-key",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

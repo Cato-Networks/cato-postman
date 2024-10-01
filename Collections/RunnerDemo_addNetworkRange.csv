@@ -1,0 +1,11 @@
+siteName,name,rangeType,subnet,localIp,vlan,gateway,dhcpType,relayGroupId,ipRange
+site2,network2-1,Direct,192.168.201.0/24,192.168.201.1,,,,,
+site2,network2-2,Routed,192.168.202.0/24,,,192.168.2.250,,,
+site2,network2-3,VLAN,192.168.203.0/24,192.168.203.1,203,,,,
+site2,network2-4,VLAN,192.168.204.0/24,192.168.204.1,204,,DHCP_RANGE,,192.168.204.10-192.168.204.20
+site2,network2-5,VLAN,192.168.205.0/24,192.168.205.1,205,,DHCP_RELAY,2,
+site3,network3-1,Direct,192.168.231.0/24,192.168.231.1,,,,,
+site3,network3-2,Routed,192.168.232.0/24,,,192.168.3.250,,,
+site3,network3-3,VLAN,192.168.233.0/24,192.168.233.1,233,,,,
+site3,network3-4,VLAN,192.168.234.0/24,192.168.234.1,234,,DHCP_RANGE,,192.168.234.10-192.168.234.20
+site3,networkFaulty,Routed,192.168.233.0/24,,,192.168.3.250,DHCP_RELAY,2,

@@ -1,0 +1,12 @@
+name,description,siteType,connectionType,nativeNetworkRange,countryCode,stateCode,timezone
+site1,,BRANCH,SOCKET_X1500,192.168.1.0/24,FR,,Europe/Paris
+site2,,BRANCH,SOCKET_X1500,192.168.2.0/24,CN,CN-SH,Asia/Shanghai
+site3,,BRANCH,SOCKET_X1500,192.168.3.0/24,ES,,Europe/Madrid
+site4,,BRANCH,SOCKET_X1500,192.168.4.0/24,GB,,Europe/London
+site5,,BRANCH,SOCKET_X1500,192.168.5.0/24,DE,,Europe/Berlin
+site6,,BRANCH,SOCKET_X1500,192.168.6.0/24,IT,,Europe/Rome
+site7,,DATACENTER,SOCKET_X1700,10.1.1.0/24,FR,,Europe/Paris
+site8,,DATACENTER,SOCKET_X1700,10.2.1.0/24,FR,,Europe/Paris
+site9,,CLOUD_DC,SOCKET_AZ1500,10.3.1.0/24,NL,,Europe/Amsterdam
+site10,,CLOUD_DC,SOCKET_AWS1500,10.4.1.0/24,IE,,Europe/Dublin
+faultySite,,BRANCH,SOCKET_X1500,192.168.3.0/24,FR,,Europe/Paris
